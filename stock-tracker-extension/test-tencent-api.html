@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>腾讯股票API测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>腾讯股票API测试工具</h1>
+        
+        <div>
+            <h3>测试腾讯财经API</h3>
+            <button onclick="testTencentAPI()">测试腾讯API - 600000</button>
+            <button onclick="testTencentMultiple()">测试多只股票</button>
+            <button onclick="testMockData()">测试模拟数据</button>
+        </div>
+
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        function showResult(content, isError = false) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = `result ${isError ? 'error' : 'success'}`;
+            resultDiv.textContent = content;
+        }
+
+        async function testTencentAPI() {
+            showResult('正在测试腾讯API...');
+            
+            try {
+                const url = 'https://qt.gtimg.cn/q=sh600000';
+                const response = await fetch(url, {
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                        'Referer': 'https://gu.qq.com'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const text = await response.text();
+                
+                showResult(`腾讯API响应:\n${text}\n\n解析结果:\n${parseTencentData(text)}`);
+            } catch (error) {
+                showResult(`腾讯API测试失败:\n${error.message}`, true);
+            }
+        }
+
+        async function testTencentMultiple() {
+            showResult('正在测试多只股票...');
+            
+            try {
+                const symbols = ['sh600000', 'sz000001', 'sh600519'];
+                const url = `https://qt.gtimg.cn/q=${symbols.join(',')}`;
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                        'Referer': 'https://gu.qq.com'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const text = await response.text();
+                
+                const lines = text.split('\n').filter(line => line.trim());
+                let result = '多只股票数据:\n\n';
+                
+                lines.forEach((line, index) => {
+                    result += `${symbols[index]}:\n${parseTencentData(line)}\n\n`;
+                });
+                
+                showResult(result);
+            } catch (error) {
+                showResult(`多只股票测试失败:\n${error.message}`, true);
+            }
+        }
+
+        function testMockData() {
+            showResult('生成模拟数据...');
+            
+            const symbols = ['600000', '000001', '600519'];
+            let result = '模拟股票数据:\n\n';
+            
+            symbols.forEach(symbol => {
+                const mockData = generateMockData(symbol);
+                result += `${symbol} (${mockData.name}):\n`;
+                result += `当前价格: ${mockData.price}\n`;
+                result += `涨跌额: ${mockData.change}\n`;
+                result += `涨跌幅: ${mockData.changePercent}%\n`;
+                result += `成交量: ${mockData.volume}\n\n`;
+            });
+            
+            showResult(result);
+        }
+
+        function parseTencentData(line) {
+            try {
+                const match = line.match(/v_[^=]+=["']([^"']+)["']/);
+                if (!match) return '无法解析数据';
+
+                const data = match[1].split('~');
+                if (data.length < 10) return '数据格式不完整';
+
+                const name = data[1];
+                const currentPrice = parseFloat(data[3]) || 0;
+                const change = parseFloat(data[4]) || 0;
+                const changePercent = parseFloat(data[5]) || 0;
+                const volume = parseInt(data[6]) || 0;
+
+                return `股票名称: ${name}
+当前价格: ${currentPrice}
+涨跌额: ${change}
+涨跌幅: ${changePercent}%
+成交量: ${volume}`;
+            } catch (error) {
+                return `解析失败: ${error.message}`;
+            }
+        }
+
+        function generateMockData(symbol) {
+            const stockNames = {
+                '600000': '浦发银行',
+                '000001': '平安银行', 
+                '600519': '贵州茅台'
+            };
+            
+            const name = stockNames[symbol] || `股票${symbol}`;
+            const basePrice = 10 + Math.random() * 90;
+            const change = (Math.random() - 0.5) * 2;
+            const changePercent = (change / basePrice) * 100;
+            
+            return {
+                name,
+                price: parseFloat(basePrice.toFixed(2)),
+                change: parseFloat(change.toFixed(2)),
+                changePercent: parseFloat(changePercent.toFixed(2)),
+                volume: Math.floor(Math.random() * 10000000)
+            };
+        }
+    </script>
+</body>
+</html>

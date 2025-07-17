@@ -1,0 +1,284 @@
+/* 油画风格主题样式 */
+
+/* 主背景渐变 - 模拟油画的色彩过渡 */
+.oil-painting-bg {
+  background: linear-gradient(
+    135deg,
+    #f7e98e 0%,     /* 柔和黄色 */
+    #a8e6cf 25%,    /* 薄荷绿 */
+    #7fcdcd 50%,    /* 青绿色 */
+    #81c7d4 75%,    /* 天蓝色 */
+    #a8d8ea 100%    /* 浅蓝色 */
+  );
+  position: relative;
+}
+
+/* 油画纹理效果 */
+.oil-painting-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* 卡片样式 - 油画画布效果 */
+.oil-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 卡片内部纹理 */
+.oil-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.1) 50%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(255,255,255,0.05) 50%, transparent 52%);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+/* 股票卡片特殊样式 */
+.stock-card-oil {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(248, 250, 252, 0.8) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stock-card-oil:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* 涨跌颜色 - 油画风格 */
+.oil-price-up {
+  color: #e74c3c;
+  text-shadow: 0 1px 2px rgba(231, 76, 60, 0.2);
+}
+
+.oil-price-down {
+  color: #27ae60;
+  text-shadow: 0 1px 2px rgba(39, 174, 96, 0.2);
+}
+
+/* 按钮样式 - 油画质感 */
+.oil-button {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(240, 248, 255, 0.6) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.oil-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.oil-button:hover::before {
+  left: 100%;
+}
+
+.oil-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 搜索框样式 */
+.oil-search {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.oil-search:focus {
+  outline: none;
+  border-color: rgba(129, 199, 212, 0.6);
+  box-shadow: 0 0 0 3px rgba(129, 199, 212, 0.1);
+}
+
+/* 详情弹窗背景 */
+.oil-modal-backdrop {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(173, 216, 230, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(255, 218, 185, 0.2) 0%, transparent 50%),
+    linear-gradient(135deg,
+      rgba(255, 248, 220, 0.8) 0%,
+      rgba(240, 248, 255, 0.8) 25%,
+      rgba(255, 240, 245, 0.8) 50%,
+      rgba(248, 248, 255, 0.8) 75%,
+      rgba(255, 250, 240, 0.8) 100%
+    );
+  backdrop-filter: blur(20px);
+  animation: oil-backdrop-shimmer 8s ease-in-out infinite;
+}
+
+/* 详情弹窗样式 */
+.oil-modal {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 250, 252, 0.92) 100%
+  );
+  backdrop-filter: blur(30px);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 28px;
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 滚动条样式 */
+.oil-modal ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.oil-modal ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.oil-modal ::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    135deg,
+    rgba(129, 199, 212, 0.6) 0%,
+    rgba(255, 182, 193, 0.6) 100%
+  );
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.oil-modal ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(129, 199, 212, 0.8) 0%,
+    rgba(255, 182, 193, 0.8) 100%
+  );
+}
+
+/* 文字样式 */
+.oil-text-primary {
+  color: #2c3e50;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.oil-text-secondary {
+  color: #7f8c8d;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+/* 删除按钮特殊样式 */
+.oil-delete-button {
+  background: linear-gradient(
+    135deg,
+    rgba(231, 76, 60, 0.8) 0%,
+    rgba(192, 57, 43, 0.9) 100%
+  );
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.oil-delete-button:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(231, 76, 60, 0.9) 0%,
+    rgba(192, 57, 43, 1) 100%
+  );
+  transform: scale(1.05);
+}
+
+/* 动画效果 */
+@keyframes oil-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes oil-backdrop-shimmer {
+  0%, 100% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    background-position: 25% 25%, 75% 75%, 40% 60%;
+    filter: hue-rotate(5deg);
+  }
+  50% {
+    background-position: 50% 50%, 50% 50%, 60% 40%;
+    filter: hue-rotate(10deg);
+  }
+  75% {
+    background-position: 75% 75%, 25% 25%, 30% 70%;
+    filter: hue-rotate(5deg);
+  }
+}
+
+.oil-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: oil-shimmer 2s infinite;
+}
+
+/* 响应式调整 */
+@media (max-width: 400px) {
+  .oil-card {
+    border-radius: 12px;
+  }
+  
+  .oil-button {
+    border-radius: 8px;
+  }
+}

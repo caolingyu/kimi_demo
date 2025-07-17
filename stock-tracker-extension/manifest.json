@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "股票行情追踪器",
+  "version": "1.0.0",
+  "description": "实时追踪中美股票和基金行情，支持自选管理",
+  "permissions": [
+    "storage",
+    "notifications",
+    "activeTab",
+    "background"
+  ],
+  "host_permissions": [
+    "https://hq.sinajs.cn/*",
+    "https://suggest3.sinajs.cn/*",
+    "https://qt.gtimg.cn/*",
+    "https://smartbox.gtimg.cn/*",
+    "https://query1.finance.yahoo.com/*",
+    "https://fund.eastmoney.com/*",
+    "https://push2.eastmoney.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "股票行情追踪器",
+    "default_icon": {
+      "48": "icons/icon48.png"
+    }
+  },
+  "options_page": "src/options/options.html",
+  "icons": {
+    "48": "icons/icon48.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
